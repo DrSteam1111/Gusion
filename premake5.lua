@@ -18,6 +18,9 @@ project "Gusion"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 	
+	pchheader "gipch.h"
+	pchsource "Gusion/src/gipch.cpp"
+	
 	files
 	{
 		"%{prj.name}/src/**.h",
@@ -26,7 +29,8 @@ project "Gusion"
 	
 	includedirs
 	{
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/spdlog/include",
+		"%{prj.name}/src"
 	}
 	
 	filter "system:windows"
