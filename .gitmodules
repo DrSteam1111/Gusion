@@ -1,0 +1,3 @@
+[submodule "Gusion/vendor/spdlog"]
+	path = Gusion/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git
