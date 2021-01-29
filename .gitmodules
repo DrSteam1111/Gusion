@@ -1,3 +1,6 @@
 [submodule "Gusion/vendor/spdlog"]
 	path = Gusion/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "Gusion/vendor/GLFW"]
+	path = Gusion/vendor/GLFW
+	url = https://github.com/DrSteam1111/glfw.git
