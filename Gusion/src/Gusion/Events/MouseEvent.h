@@ -38,7 +38,7 @@ namespace Gusion {
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseScrolledEvent: " << GetXOffset << ", " << GetYOffset();
+			ss << "MouseScrolledEvent: " << GetXOffset() << ", " << GetYOffset();
 			return ss.str();
 		}
 
@@ -61,7 +61,7 @@ namespace Gusion {
 		int m_Button;
 	};
 
-	class GUSION_API MouseButtonPressedEvent : MouseButtonEvent
+	class GUSION_API MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonPressedEvent(int button)
@@ -77,7 +77,7 @@ namespace Gusion {
 		EVENT_CLASS_TYPE(MouseButtonPressed)
 	};
 
-	class GUSION_API MouseButtonReleasedEvent : MouseButtonEvent
+	class GUSION_API MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonReleasedEvent(int button)

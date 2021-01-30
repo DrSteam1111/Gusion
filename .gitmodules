@@ -4,3 +4,9 @@
 [submodule "Gusion/vendor/GLFW"]
 	path = Gusion/vendor/GLFW
 	url = https://github.com/DrSteam1111/glfw.git
+[submodule "Gusion/vendor/imgui"]
+	path = Gusion/vendor/imgui
+	url = https://github.com/DrSteam1111/imgui.git
+[submodule "Gusion/vendor/glm"]
+	path = Gusion/vendor/glm
+	url = https://github.com/g-truc/glm.git
