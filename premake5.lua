@@ -9,6 +9,11 @@ workspace "Gusion"
 		"Dist"
 	}
 	
+	flags
+	{
+		"MultiProcessorCompile"
+	}
+	
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
@@ -16,6 +21,7 @@ IncludeDir["GLFW"] = "Gusion/vendor/GLFW/include"
 IncludeDir["Glad"] = "Gusion/vendor/Glad/include"
 IncludeDir["ImGui"] = "Gusion/vendor/imgui"
 IncludeDir["glm"] = "Gusion/vendor/glm"
+IncludeDir["stb_image"] = "Gusion/vendor/stb_image"
 
 group "Dependencies"
 	include "Gusion/vendor/GLFW"
@@ -41,6 +47,8 @@ project "Gusion"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb_image/**.h",
+		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl"
 	}
@@ -57,7 +65,8 @@ project "Gusion"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_image}"
 	}
 	
 	links

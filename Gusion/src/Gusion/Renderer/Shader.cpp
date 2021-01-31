@@ -1,104 +1,70 @@
 #include "gipch.h"
 #include "Shader.h"
 
-#include <glad/glad.h>
+#include "Renderer.h"
+#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Gusion {
 
-	Shader::Shader(const std::string& vertexSrc, const std::string& fragmentSrc)
+	Ref<Shader> Shader::Create(const std::string& filepath)
 	{
-		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-		const GLchar* source = vertexSrc.c_str();
-		glShaderSource(vertexShader, 1, &source, 0);
-
-		glCompileShader(vertexShader);
-
-		GLint isCompiled = 0;
-		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isCompiled);
-		if (isCompiled == GL_FALSE)
+		switch (Renderer::GetAPI())
 		{
-			GLint maxLength = 0;
-			glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &maxLength);
-
-			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(vertexShader, maxLength, &maxLength, &infoLog[0]);
-
-			glDeleteShader(vertexShader);
-
-			GI_CORE_ERROR("{0}", infoLog.data());
-			GI_CORE_ASSERT(false, "Vertex shader compilation failure!");
-			return;
+			case RendererAPI::API::None:	GI_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
+			case RendererAPI::API::OpenGL:	return std::make_shared<OpenGLShader>(filepath);
 		}
 
-		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		GI_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
+	}
 
-		source = fragmentSrc.c_str();
-		glShaderSource(fragmentShader, 1, &source, 0);
-
-		glCompileShader(fragmentShader);
-
-		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isCompiled);
-		if (isCompiled == GL_FALSE)
+	Ref<Shader> Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+	{
+		switch (Renderer::GetAPI())
 		{
-			GLint maxLength = 0;
-			glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &maxLength);
-
-			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, &infoLog[0]);
-
-			glDeleteShader(fragmentShader);
-			glDeleteShader(vertexShader);
-
-			GI_CORE_ERROR("{0}", infoLog.data());
-			GI_CORE_ASSERT(false, "Fragment shader compilation failure!");
-			return;
+			case RendererAPI::API::None:	GI_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
+			case RendererAPI::API::OpenGL:	return std::make_shared<OpenGLShader>(name, vertexSrc, fragmentSrc);
 		}
 
-		m_RendererID = glCreateProgram();
-		GLuint program = m_RendererID;
-
-		glAttachShader(program, vertexShader);
-		glAttachShader(program, fragmentShader);
-
-		glLinkProgram(program);
-
-		GLint isLinked = 0;
-		glGetProgramiv(program, GL_LINK_STATUS, (int*)&isLinked);
-		if (isLinked == GL_FALSE)
-		{
-			GLint maxLength = 0;
-			glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
-
-			std::vector<GLchar> infoLog(maxLength);
-			glGetProgramInfoLog(fragmentShader, maxLength, &maxLength, &infoLog[0]);
-
-			glDeleteProgram(program);
-
-			glDeleteShader(vertexShader);
-			glDeleteShader(fragmentShader);
-
-			GI_CORE_ERROR("{0}", infoLog.data());
-			GI_CORE_ASSERT(false, "Shader link failure!");
-			return;
-		}
-
-		glDetachShader(program, vertexShader);
-		glDetachShader(program, fragmentShader);
+		GI_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
 	}
 
-	Shader::~Shader()
+	void ShaderLibrary::Add(const std::string& name, const Ref<Shader>& shader)
 	{
-		glDeleteProgram(m_RendererID);
+		GI_CORE_ASSERT(!Exists(name), "Shader already exists!");
+		m_Shaders[name] = shader;
 	}
 
-	void Shader::Bind() const
+	void ShaderLibrary::Add(const Ref<Shader>& shader)
 	{
-		glUseProgram(m_RendererID);
+		auto& name = shader->GetName();
+		Add(name, shader);
 	}
 
-	void Shader::Unbind() const
+	Ref<Shader> ShaderLibrary::Load(const std::string& filepath)
 	{
-		glUseProgram(0);
+		auto shader = Shader::Create(filepath);
+		Add(shader);
+		return shader;
 	}
+
+	Ref<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filepath)
+	{
+		auto shader = Shader::Create(filepath);
+		Add(name, shader);
+		return shader;
+	}
+
+	Ref<Shader> ShaderLibrary::Get(const std::string& name)
+	{
+		GI_CORE_ASSERT(Exists(name), "Shader not found!");
+		return m_Shaders[name];
+	}
+
+	bool ShaderLibrary::Exists(const std::string& name) const
+	{
+		return m_Shaders.find(name) != m_Shaders.end();
+	}
+
 }

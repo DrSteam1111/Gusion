@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Gusion/Core.h"
+#include "Gusion/Core/Timestep.h"
 #include "Gusion/Events/Event.h"
 
 namespace Gusion {
@@ -13,7 +14,7 @@ namespace Gusion {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timestep ts) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
 
