@@ -121,7 +121,7 @@ public:
 		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 
 		m_Texture = Gusion::Texture2D::Create("assets/textures/Checkerboard.png");
-		m_ChernoLogoTexture = Gusion::Texture2D::Create("assets/textures/GusionLogo.png");
+		m_GusionLogoTexture = Gusion::Texture2D::Create("assets/textures/GusionLogo.png");
 
 		std::dynamic_pointer_cast<Gusion::OpenGLShader>(textureShader)->Bind();
 		std::dynamic_pointer_cast<Gusion::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
@@ -157,7 +157,7 @@ public:
 
 		m_Texture->Bind();
 		Gusion::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-		m_ChernoLogoTexture->Bind();
+		m_GusionLogoTexture->Bind();
 		Gusion::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		// Triangle
@@ -185,7 +185,7 @@ private:
 	Gusion::Ref<Gusion::Shader> m_FlatColorShader;
 	Gusion::Ref<Gusion::VertexArray> m_SquareVA;
 
-	Gusion::Ref<Gusion::Texture2D> m_Texture, m_ChernoLogoTexture;
+	Gusion::Ref<Gusion::Texture2D> m_Texture, m_GusionLogoTexture;
 
 	Gusion::OrthographicCameraController m_CameraController;
 	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };

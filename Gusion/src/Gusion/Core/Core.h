@@ -5,15 +5,15 @@
 #ifdef GI_PLATFORM_WINDOWS
 #if GI_DYNAMIC_LINK
 	#ifdef GI_BUILD_DLL
-		#define HAZEL_API __declspec(dllexport)
+		#define GUSION_API __declspec(dllexport)
 	#else
-		#define HAZEL_API __declspec(dllimport)
+		#define GUSION_API __declspec(dllimport)
 	#endif
 #else
 	#define GUSION_API 
 #endif
 #else
-	#error Hazel only supports Windows!
+	#error Gusion only supports Windows!
 #endif
 
 #ifdef GI_DEBUG
