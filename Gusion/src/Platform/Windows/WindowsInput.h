@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Gusion/Input.h"
+#include "Gusion/Core/Input.h"
 
 namespace Gusion {
 
@@ -13,7 +13,6 @@ namespace Gusion {
 		virtual std::pair<float, float> GetMousePositionImpl() override;
 		virtual float GetMouseXImpl() override;
 		virtual float GetMouseYImpl() override;
-
 	};
 
 }

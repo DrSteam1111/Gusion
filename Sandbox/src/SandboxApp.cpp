@@ -11,9 +11,9 @@ class ExampleLayer : public Gusion::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f)
+		: Layer("Example"), m_CameraController(1280.0f / 720.0f)
 	{
-		m_vertexArray.reset(Gusion::VertexArray::Create());
+		m_VertexArray.reset(Gusion::VertexArray::Create());
 
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
@@ -28,12 +28,12 @@ public:
 			{ Gusion::ShaderDataType::Float4, "a_Color" }
 		};
 		vertexBuffer->SetLayout(layout);
-		m_vertexArray->AddVertexBuffer(vertexBuffer);
+		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 		uint32_t indices[3] = { 0, 1, 2 };
 		Gusion::Ref<Gusion::IndexBuffer> indexBuffer;
 		indexBuffer.reset(Gusion::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
-		m_vertexArray->SetIndexBuffer(indexBuffer);
+		m_VertexArray->SetIndexBuffer(indexBuffer);
 
 		m_SquareVA.reset(Gusion::VertexArray::Create());
 
@@ -48,8 +48,8 @@ public:
 		squareVB.reset(Gusion::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		squareVB->SetLayout({
 			{ Gusion::ShaderDataType::Float3, "a_Position" },
-			{ Gusion::ShaderDataType::Float2, "a_TexCoord" },
-		});
+			{ Gusion::ShaderDataType::Float2, "a_TexCoord" }
+			});
 		m_SquareVA->AddVertexBuffer(squareVB);
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
@@ -59,32 +59,27 @@ public:
 
 		std::string vertexSrc = R"(
 			#version 330 core
-
+			
 			layout(location = 0) in vec3 a_Position;
 			layout(location = 1) in vec4 a_Color;
-			
 			uniform mat4 u_ViewProjection;
 			uniform mat4 u_Transform;
-
 			out vec3 v_Position;
 			out vec4 v_Color;
-
 			void main()
 			{
 				v_Position = a_Position;
 				v_Color = a_Color;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
 			}
 		)";
 
 		std::string fragmentSrc = R"(
 			#version 330 core
-
+			
 			layout(location = 0) out vec4 color;
-
 			in vec3 v_Position;
 			in vec4 v_Color;
-
 			void main()
 			{
 				color = vec4(v_Position * 0.5 + 0.5, 1.0);
@@ -96,30 +91,25 @@ public:
 
 		std::string flatColorShaderVertexSrc = R"(
 			#version 330 core
-
+			
 			layout(location = 0) in vec3 a_Position;
-
 			uniform mat4 u_ViewProjection;
 			uniform mat4 u_Transform;
-
 			out vec3 v_Position;
-
 			void main()
 			{
 				v_Position = a_Position;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
 			}
 		)";
 
 		std::string flatColorShaderFragmentSrc = R"(
 			#version 330 core
-
+			
 			layout(location = 0) out vec4 color;
-
 			in vec3 v_Position;
-
+			
 			uniform vec3 u_Color;
-
 			void main()
 			{
 				color = vec4(u_Color, 1.0);
@@ -131,7 +121,7 @@ public:
 		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 
 		m_Texture = Gusion::Texture2D::Create("assets/textures/Checkerboard.png");
-		m_GusionLogoTexture = Gusion::Texture2D::Create("assets/textures/GusionLogo.png");
+		m_ChernoLogoTexture = Gusion::Texture2D::Create("assets/textures/GusionLogo.png");
 
 		std::dynamic_pointer_cast<Gusion::OpenGLShader>(textureShader)->Bind();
 		std::dynamic_pointer_cast<Gusion::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
@@ -139,28 +129,14 @@ public:
 
 	void OnUpdate(Gusion::Timestep ts) override
 	{
-		if (Gusion::Input::IsKeyPressed(GI_KEY_LEFT))
-			m_CameraPosition.x -= m_CameraMoveSpeed * ts;
-		else if (Gusion::Input::IsKeyPressed(GI_KEY_RIGHT))
-			m_CameraPosition.x += m_CameraMoveSpeed * ts;
+		// Update
+		m_CameraController.OnUpdate(ts);
 
-		if (Gusion::Input::IsKeyPressed(GI_KEY_UP))
-			m_CameraPosition.y += m_CameraMoveSpeed * ts;
-		else if (Gusion::Input::IsKeyPressed(GI_KEY_DOWN))
-			m_CameraPosition.y -= m_CameraMoveSpeed * ts;
-
-		if (Gusion::Input::IsKeyPressed(GI_KEY_E))
-			m_CameraRotation += m_CameraRotationSpeed * ts;
-		if (Gusion::Input::IsKeyPressed(GI_KEY_Q))
-			m_CameraRotation -= m_CameraRotationSpeed * ts;
-
+		// Render
 		Gusion::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Gusion::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
-
-		Gusion::Renderer::BeginScene(m_Camera);
+		Gusion::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
@@ -181,11 +157,11 @@ public:
 
 		m_Texture->Bind();
 		Gusion::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-		m_GusionLogoTexture->Bind();
+		m_ChernoLogoTexture->Bind();
 		Gusion::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		// Triangle
-		//Gusion::Renderer::Submit(m_Shader, m_vertexArray);
+		// Gusion::Renderer::Submit(m_Shader, m_VertexArray);
 
 		Gusion::Renderer::EndScene();
 	}
@@ -197,27 +173,21 @@ public:
 		ImGui::End();
 	}
 
-	void OnEvent(Gusion::Event& event) override
+	void OnEvent(Gusion::Event& e) override
 	{
+		m_CameraController.OnEvent(e);
 	}
-
 private:
 	Gusion::ShaderLibrary m_ShaderLibrary;
 	Gusion::Ref<Gusion::Shader> m_Shader;
-	Gusion::Ref<Gusion::VertexArray> m_vertexArray;
+	Gusion::Ref<Gusion::VertexArray> m_VertexArray;
 
 	Gusion::Ref<Gusion::Shader> m_FlatColorShader;
 	Gusion::Ref<Gusion::VertexArray> m_SquareVA;
 
-	Gusion::Ref<Gusion::Texture2D> m_Texture, m_GusionLogoTexture;
+	Gusion::Ref<Gusion::Texture2D> m_Texture, m_ChernoLogoTexture;
 
-	Gusion::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition;
-	float m_CameraMoveSpeed = 5.0f;
-
-	float m_CameraRotation = 0.0f;
-	float m_CameraRotationSpeed = 180.0f;
-
+	Gusion::OrthographicCameraController m_CameraController;
 	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 };
 

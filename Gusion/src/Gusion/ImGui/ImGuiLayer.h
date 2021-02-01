@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Gusion/Layer.h"
+#include "Gusion/Core/Layer.h"
 
 #include "Gusion/Events/ApplicationEvent.h"
 #include "Gusion/Events/KeyEvent.h"

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gipch.h"
-#include "Gusion/Core.h"
+#include "Gusion/Core/Core.h"
 
 namespace Gusion {
 
@@ -54,6 +54,7 @@ namespace Gusion {
 		{
 		}
 
+		// F will be deduced by the compiler
 		template<typename T, typename F>
 		bool Dispatch(const F& func)
 		{

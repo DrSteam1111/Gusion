@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "Gusion/Renderer/Buffer.h"
 
 namespace Gusion {

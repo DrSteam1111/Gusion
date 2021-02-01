@@ -9,20 +9,20 @@ namespace Gusion {
 	{
 		switch (type)
 		{
-		case Gusion::ShaderDataType::Float:		return GL_FLOAT;
-		case Gusion::ShaderDataType::Float2:	return GL_FLOAT;
-		case Gusion::ShaderDataType::Float3:	return GL_FLOAT;
-		case Gusion::ShaderDataType::Float4:	return GL_FLOAT;
-		case Gusion::ShaderDataType::Mat3:		return GL_FLOAT;
-		case Gusion::ShaderDataType::Mat4:		return GL_FLOAT;
-		case Gusion::ShaderDataType::Int:		return GL_INT;
-		case Gusion::ShaderDataType::Int2:		return GL_INT;
-		case Gusion::ShaderDataType::Int3:		return GL_INT;
-		case Gusion::ShaderDataType::Int4:		return GL_INT;
-		case Gusion::ShaderDataType::Bool:		return GL_BOOL;
+		case Gusion::ShaderDataType::Float:    return GL_FLOAT;
+		case Gusion::ShaderDataType::Float2:   return GL_FLOAT;
+		case Gusion::ShaderDataType::Float3:   return GL_FLOAT;
+		case Gusion::ShaderDataType::Float4:   return GL_FLOAT;
+		case Gusion::ShaderDataType::Mat3:     return GL_FLOAT;
+		case Gusion::ShaderDataType::Mat4:     return GL_FLOAT;
+		case Gusion::ShaderDataType::Int:      return GL_INT;
+		case Gusion::ShaderDataType::Int2:     return GL_INT;
+		case Gusion::ShaderDataType::Int3:     return GL_INT;
+		case Gusion::ShaderDataType::Int4:     return GL_INT;
+		case Gusion::ShaderDataType::Bool:     return GL_BOOL;
 		}
 
-		GI_CORE_ASSERT(false, "Unknown ShaderDataType");
+		GI_CORE_ASSERT(false, "Unknown ShaderDataType!");
 		return 0;
 	}
 
@@ -53,7 +53,6 @@ namespace Gusion {
 		glBindVertexArray(m_RendererID);
 		vertexBuffer->Bind();
 
-		uint32_t index = 0;
 		const auto& layout = vertexBuffer->GetLayout();
 		for (const auto& element : layout)
 		{

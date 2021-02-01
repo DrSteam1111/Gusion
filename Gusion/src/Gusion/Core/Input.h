@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Gusion/Core.h"
+#include "Gusion/Core/Core.h"
 
 namespace Gusion {
 

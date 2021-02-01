@@ -5,15 +5,15 @@
 #ifdef GI_PLATFORM_WINDOWS
 #if GI_DYNAMIC_LINK
 	#ifdef GI_BUILD_DLL
-		#define GUSION_API __declspec(dllexport)
+		#define HAZEL_API __declspec(dllexport)
 	#else
-		#define GUSION_API __declspec(dllimport)
+		#define HAZEL_API __declspec(dllimport)
 	#endif
 #else
-	#define GUSION_API
+	#define GUSION_API 
 #endif
 #else
-	#error Gusion only supports Windows!
+	#error Hazel only supports Windows!
 #endif
 
 #ifdef GI_DEBUG
@@ -21,8 +21,8 @@
 #endif
 
 #ifdef GI_ENABLE_ASSERTS
-	#define GI_ASSERT(x, ...) { if(!(x)) { GI_ERROR("Assertion Failed {0}", __VA_ARGS__); __debugbreak(); } }
-	#define GI_CORE_ASSERT(x, ...) { if(!(x)) { GI_CORE_ERROR("Assertion Failed {0}", __VA_ARGS__); __debugbreak(); } }
+	#define GI_ASSERT(x, ...) { if(!(x)) { GI_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+	#define GI_CORE_ASSERT(x, ...) { if(!(x)) { GI_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 #else
 	#define GI_ASSERT(x, ...)
 	#define GI_CORE_ASSERT(x, ...)
@@ -39,4 +39,5 @@ namespace Gusion {
 
 	template<typename T>
 	using Ref = std::shared_ptr<T>;
+
 }

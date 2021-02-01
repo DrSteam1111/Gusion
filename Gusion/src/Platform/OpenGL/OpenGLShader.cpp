@@ -58,6 +58,7 @@ namespace Gusion {
 			in.seekg(0, std::ios::beg);
 			in.read(&result[0], result.size());
 			in.close();
+			;
 		}
 		else
 		{
@@ -80,7 +81,7 @@ namespace Gusion {
 			GI_CORE_ASSERT(eol != std::string::npos, "Syntax error");
 			size_t begin = pos + typeTokenLength + 1;
 			std::string type = source.substr(begin, eol - begin);
-			GI_CORE_ASSERT(ShaderTypeFromString(type), "Invalied shader type specified");
+			GI_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specified");
 
 			size_t nextLinePos = source.find_first_not_of("\r\n", eol);
 			pos = source.find(typeToken, nextLinePos);
@@ -131,8 +132,10 @@ namespace Gusion {
 
 		m_RendererID = program;
 
+		// Link our program
 		glLinkProgram(program);
 
+		// Note the different functions here: glGetProgram* instead of glGetShader*.
 		GLint isLinked = 0;
 		glGetProgramiv(program, GL_LINK_STATUS, (int*)&isLinked);
 		if (isLinked == GL_FALSE)
@@ -140,9 +143,11 @@ namespace Gusion {
 			GLint maxLength = 0;
 			glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
 
+			// The maxLength includes the NULL character
 			std::vector<GLchar> infoLog(maxLength);
 			glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
 
+			// We don't need the program anymore.
 			glDeleteProgram(program);
 
 			for (auto id : glShaderIDs)
