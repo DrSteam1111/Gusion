@@ -15,6 +15,8 @@
 
 #include "Gusion/Core/Log.h"
 
+#include "Gusion/Debug/Instrumentor.h"
+
 #ifdef GI_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif

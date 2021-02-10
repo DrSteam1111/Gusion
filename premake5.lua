@@ -1,6 +1,6 @@
 workspace "Gusion"
-	architecture "x64"
-	startproject "Sandbox"
+	architecture "x86_64"
+	startproject "Cynocephalus"
 	
 	configurations
 	{
@@ -22,6 +22,7 @@ IncludeDir["Glad"] = "Gusion/vendor/Glad/include"
 IncludeDir["ImGui"] = "Gusion/vendor/imgui"
 IncludeDir["glm"] = "Gusion/vendor/glm"
 IncludeDir["stb_image"] = "Gusion/vendor/stb_image"
+IncludeDir["entt"] = "Gusion/vendor/entt/include"
 
 group "Dependencies"
 	include "Gusion/vendor/GLFW"
@@ -55,7 +56,8 @@ project "Gusion"
 	
 	defines
 	{
-		"_CRT_SECURE_NO_WARNINGS"
+		"_CRT_SECURE_NO_WARNINGS",
+		"GLFW_INCLUDE_NONE"
 	}
 	
 	includedirs
@@ -66,7 +68,8 @@ project "Gusion"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.entt}"
 	}
 	
 	links
@@ -79,13 +82,6 @@ project "Gusion"
 	
 	filter "system:windows"
 		systemversion "latest"
-		
-		defines
-		{
-			"GI_PLATFORM_WINDOWS",
-			"GI_BUILD_DLL",
-			"GLFW_INCLUDE_NONE"
-		}
 		
 	filter "configurations:Debug"
 		defines "GI_DEBUG"
@@ -123,7 +119,8 @@ project "Sandbox"
 		"Gusion/vendor/spdlog/include",
 		"Gusion/src",
 		"Gusion/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}"
 	}
 	
 	links
@@ -134,10 +131,53 @@ project "Sandbox"
 	filter "system:windows"
 		systemversion "latest"
 		
-		defines
-		{
-			"GI_PLATFORM_WINDOWS"
-		}
+	filter "configurations:Debug"
+		defines "GI_DEBUG"
+		runtime "Debug"
+		symbols "on"
+		
+	filter "configurations:Release"
+		defines "GI_RELEASE"
+		runtime "Release"
+		optimize "on"
+		
+	filter "configurations:Dist"
+		defines "GI_DIST"
+		runtime "Release"
+		optimize "on"
+		
+project "Cynocephalus"
+	location "Cynocephalus"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+	
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+	
+	includedirs
+	{
+		"Gusion/vendor/spdlog/include",
+		"Gusion/src",
+		"Gusion/vendor",
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}"
+	}
+	
+	links
+	{
+		"Gusion"
+	}
+	
+	filter "system:windows"
+		systemversion "latest"
 		
 	filter "configurations:Debug"
 		defines "GI_DEBUG"

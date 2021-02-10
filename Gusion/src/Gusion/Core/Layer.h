@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Gusion/Core/Core.h"
+#include "Gusion/Core/Base.h"
 #include "Gusion/Core/Timestep.h"
 #include "Gusion/Events/Event.h"
 
 namespace Gusion {
 
-	class GUSION_API Layer
+	class Layer
 	{
 	public:
 		Layer(const std::string& name = "Layer");
@@ -18,7 +18,7 @@ namespace Gusion {
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event & event) {}
 
-		inline const std::string& GetName() const { return m_DebugName; }
+		const std::string& GetName() const { return m_DebugName; }
 	protected:
 		std::string m_DebugName;
 	};
