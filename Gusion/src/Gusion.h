@@ -19,6 +19,7 @@
 
 #include "Gusion/Scene/Scene.h"
 #include "Gusion/Scene/Entity.h"
+#include "Gusion/Scene/ScriptableEntity.h"
 #include "Gusion/Scene/Components.h"
 
 // ---Renderer------------------------

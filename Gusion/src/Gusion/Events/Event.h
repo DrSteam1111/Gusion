@@ -1,6 +1,7 @@
 #pragma once
+#include <functional>
 
-#include "gipch.h"
+#include "Gusion/Debug/Instrumentor.h"
 #include "Gusion/Core/Base.h"
 
 namespace Gusion {

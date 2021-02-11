@@ -25,14 +25,7 @@ namespace Gusion {
 		GI_CORE_INFO("  Renderer: {0}", glGetString(GL_RENDERER));
 		GI_CORE_INFO("  Version: {0}", glGetString(GL_VERSION));
 
-		#ifdef GI_ENABLE_ASSERTS
-			int versionMajor;
-			int versionMinor;
-			glGetIntegerv(GL_MAJOR_VERSION, &versionMajor);
-			glGetIntegerv(GL_MINOR_VERSION, &versionMinor);
-
-			GI_CORE_ASSERT(versionMajor > 4 || (versionMajor == 4 && versionMinor >= 5), "Gusion requires at least OpenGL version 4.5!");
-		#endif // GI_ENABLE_ASSERTS
+		GI_CORE_ASSERT(GLVersion.major > 4 || (GLVersion.major == 4 && GLVersion.minor >= 5), "Gusion requires at least OpenGL version 4.5!");
 
 	}
 

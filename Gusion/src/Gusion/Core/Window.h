@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gipch.h"
+#include <sstream>
 
 #include "Gusion/Core/Base.h"
 #include "Gusion/Events/Event.h"
