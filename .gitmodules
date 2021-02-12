@@ -10,3 +10,6 @@
 [submodule "Gusion/vendor/glm"]
 	path = Gusion/vendor/glm
 	url = ../../g-truc/glm.git
+[submodule "Gusion/vendor/yaml-cpp"]
+	path = Gusion/vendor/yaml-cpp
+	url = https://github.com/DrSteam1111/yaml-cpp.git

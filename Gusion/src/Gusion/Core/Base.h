@@ -18,14 +18,8 @@
 	#define GI_DEBUGBREAK()
 #endif
 
-// TODO: Make this macro able to take in no arguments except condition
-#ifdef GI_ENABLE_ASSERTS
-	#define GI_ASSERT(x, ...) { if(!(x)) { GI_ERROR("Assertion Failed: {0}", __VA_ARGS__); GI_DEBUGBREAK(); } }
-	#define GI_CORE_ASSERT(x, ...) { if(!(x)) { GI_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); GI_DEBUGBREAK(); } }
-#else
-	#define GI_ASSERT(x, ...)
-	#define GI_CORE_ASSERT(x, ...)
-#endif
+#define GI_EXPAND_MACRO(x) x
+#define GI_STRINGIFY_MACRO(x) #x
 
 #define BIT(x) (1 << x)
 
@@ -49,3 +43,6 @@ namespace Gusion {
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
 }
+
+#include "Gusion/Core/Log.h"
+#include "Gusion/Core/Assert.h"

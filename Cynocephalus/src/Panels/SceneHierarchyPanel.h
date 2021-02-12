@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Gusion/Core/Base.h"
-#include "Gusion/Core/Log.h"
 #include "Gusion/Scene/Scene.h"
 #include "Gusion/Scene/Entity.h"
 

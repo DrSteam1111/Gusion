@@ -7,6 +7,7 @@
 #include "Gusion/Core/Application.h"
 #include "Gusion/Core/Layer.h"
 #include "Gusion/Core/Log.h"
+#include "Gusion/Core/Assert.h"
 
 #include "Gusion/Core/Timestep.h"
 

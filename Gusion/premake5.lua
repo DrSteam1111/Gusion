@@ -35,7 +35,8 @@ project "Gusion"
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.yaml_cpp}"
 	}
 	
 	links
@@ -43,6 +44,7 @@ project "Gusion"
 		"GLFW",
 		"Glad",
 		"ImGui",
+		"yaml-cpp",
 		"opengl32.lib"
 	}
 	
@@ -67,4 +69,3 @@ project "Gusion"
 		defines "GI_DIST"
 		runtime "Release"
 		optimize "on"
-		
