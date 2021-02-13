@@ -17,13 +17,18 @@ namespace Gusion {
 
 		virtual void Resize(uint32_t width, uint32_t height) override;
 
-		virtual uint32_t GetColorAttachmentRenderID() const override { return m_ColorAttachment; }
+		virtual uint32_t GetColorAttachmentRenderID(uint32_t index = 0) const override { GI_CORE_ASSERT(index < m_ColorAttachments.size()); return m_ColorAttachments[index]; }
 
 		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; }
 	private:
 		uint32_t m_RendererID = 0;
-		uint32_t m_ColorAttachment = 0, m_DepthAttachment = 0;
 		FramebufferSpecification m_Specification;
+
+		std::vector<FramebufferTextureSpecification> m_ColorAttachmentSpecifications;
+		FramebufferTextureSpecification m_DepthAttachmentSpecification = FramebufferTextureFormat::None;
+
+		std::vector<uint32_t> m_ColorAttachments;
+		uint32_t m_DepthAttachment = 0;
 	};
 
 }

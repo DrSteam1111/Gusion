@@ -13,3 +13,6 @@
 [submodule "Gusion/vendor/yaml-cpp"]
 	path = Gusion/vendor/yaml-cpp
 	url = https://github.com/DrSteam1111/yaml-cpp.git
+[submodule "Gusion/vendor/imguizmo"]
+	path = Gusion/vendor/ImGuizmo
+	url = https://github.com/DrSteam1111/ImGuizmo.git

@@ -19,7 +19,8 @@ project "Cynocephalus"
 		"%{wks.location}/Gusion/src",
 		"%{wks.location}/Gusion/vendor",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 	
 	links
